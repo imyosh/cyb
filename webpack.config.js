@@ -1,27 +1,27 @@
-const {
-  CleanWebpackPlugin
-} = require("clean-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const webpack = require("webpack");
-const path = require("path");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const webpack = require("webpack")
+const path = require("path")
 
 module.exports = {
   target: "web", // Our app can run without electron
   entry: ["./app/src/index.tsx"], // The entry point of our app; these entry points can be named and we can also have multiple if we'd like to split the webpack bundle into smaller files to improve script loading speed between multiple pages of our app
   output: {
     path: path.resolve(__dirname, "app/dist"), // Where all the output files get dropped after webpack is done with them
-    filename: "bundle.js" // The name of the webpack bundle that's generated
+    filename: "bundle.js", // The name of the webpack bundle that's generated
   },
   resolve: {
     fallback: {
-      "crypto": require.resolve("crypto-browserify"),
-      "buffer": require.resolve("buffer/"),
-      "path": require.resolve("path-browserify"),
-      "stream": require.resolve("stream-browserify")
-    }
+      crypto: require.resolve("crypto-browserify"),
+      buffer: require.resolve("buffer/"),
+      path: require.resolve("path-browserify"),
+      stream: require.resolve("stream-browserify"),
+      util: false,
+    },
   },
   module: {
-    rules: [{
+    rules: [
+      {
         // loads .html files
         test: /\.(html)$/,
         include: [path.resolve(__dirname, "app/src")],
@@ -29,14 +29,16 @@ module.exports = {
           loader: "html-loader",
           options: {
             sources: {
-              "list": [{
-                "tag": "img",
-                "attribute": "data-src",
-                "type": "src"
-              }]
-            }
-          }
-        }
+              list: [
+                {
+                  tag: "img",
+                  attribute: "data-src",
+                  type: "src",
+                },
+              ],
+            },
+          },
+        },
       },
       // loads .js/jsx/tsx files
       {
@@ -44,41 +46,50 @@ module.exports = {
         include: [path.resolve(__dirname, "app/src")],
         loader: "babel-loader",
         resolve: {
-          extensions: [".js", ".jsx", ".ts", ".tsx", ".json"]
-        }
+          extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
+        },
       },
-      // loads .css files
+      // loads .css and .scss files
+
       {
-        test: /\.css$/,
+        test: /\.(css|scss)$/,
         include: [
           path.resolve(__dirname, "app/src"),
           path.resolve(__dirname, "node_modules/"),
         ],
-        use: [
-          MiniCssExtractPlugin.loader,
-          "css-loader"
-        ],
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
         resolve: {
-          extensions: [".css"]
-        }
+          extensions: [".css", ".sass"],
+        },
       },
+
       // loads common image formats
       {
         test: /\.(svg|png|jpg|gif)$/,
-        include: [
-          path.resolve(__dirname, "resources/images")
-        ],
-        type: "asset/inline"
+        include: [path.resolve(__dirname, "resources/images")],
+        type: "asset/inline",
+      },
+
+      {
+        test: /\.svg$/,
+        use: ["@svgr/webpack"],
       },
       // loads common font formats
       {
         test: /\.(eot|woff|woff2|ttf)$/,
-        include: [
-          path.resolve(__dirname, "resources/fonts")
+        include: [path.resolve(__dirname, "resources/fonts")],
+        type: "asset/inline",
+      },
+
+      {
+        test: /\.(docs)$/i,
+        use: [
+          {
+            loader: "file-loader",
+          },
         ],
-        type: "asset/inline"
-      }
-    ]
+      },
+    ],
   },
   plugins: [
     // fix "process is not defined" error;
@@ -86,6 +97,6 @@ module.exports = {
     new webpack.ProvidePlugin({
       process: "process/browser.js",
     }),
-    new CleanWebpackPlugin()
-  ]
-};
+    new CleanWebpackPlugin(),
+  ],
+}

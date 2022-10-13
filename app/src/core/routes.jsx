@@ -1,47 +1,38 @@
-import React from "react";
-import { Routes, Route } from "react-router";
-import ROUTES from "Constants/routes";
-import loadable from "@loadable/component";
+import React from "react"
+import { Routes, Route } from "react-router"
+import loadable from "@loadable/component"
+
+// import {redi} from 'react-router-dom'
 
 // Load bundles asynchronously so that the initial render happens faster
-const Welcome = loadable(() =>
-  import(/* webpackChunkName: "WelcomeChunk" */ "Pages/welcome/welcome")
-);
-const About = loadable(() =>
-  import(/* webpackChunkName: "AboutChunk" */ "Pages/about/about")
-);
-const Motd = loadable(() =>
-  import(/* webpackChunkName: "MotdChunk" */ "Pages/motd/motd")
-);
-const Localization = loadable(() =>
+const CategoryPanel = loadable(() =>
   import(
-    /* webpackChunkName: "LocalizationChunk" */ "Pages/localization/localization"
+    /* webpackChunkName: "ContextMenuChunk" */ "Pages/categoryPanel/CategoryPanel"
   )
-);
-const UndoRedo = loadable(() =>
-  import(/* webpackChunkName: "UndoRedoChunk" */ "Pages/undoredo/undoredo")
-);
-const ContextMenu = loadable(() =>
-  import(/* webpackChunkName: "ContextMenuChunk" */ "Pages/contextmenu/contextmenu")
-);
-const Image = loadable(() =>
-  import(/* webpackChunkName: "ContextMenuChunk" */ "Pages/image/image")
-);
+)
+
+const AdminPanel = loadable(() =>
+  import(
+    /* webpackChunkName: "ContextMenuChunk" */ "Pages/adminPanel/AdminPanel"
+  )
+)
 
 class AppRoutes extends React.Component {
-  render() {    
+  render() {
     return (
-      <Routes>
-        <Route path={ROUTES.WELCOME} element={<Welcome />}></Route>
-        <Route path={ROUTES.ABOUT} element={<About />}></Route>
-        <Route path={ROUTES.MOTD} element={<Motd />}></Route>
-        <Route path={ROUTES.LOCALIZATION} element={<Localization />}></Route>
-        <Route path={ROUTES.UNDOREDO} element={<UndoRedo />}></Route>
-        <Route path={ROUTES.CONTEXTMENU} element={<ContextMenu />}></Route>
-        <Route path={ROUTES.IMAGE} element={<Image />}></Route>
-      </Routes>
-    );
+      <div
+        style={{
+          flex: 1,
+          background: "rgba(255, 255, 255, 0.15)",
+          backdropFilter: "blur(5px)",
+        }}>
+        <Routes>
+          <Route path={"/admin-panel"} element={<AdminPanel />}></Route>
+          <Route path={"/*"} element={<CategoryPanel />}></Route>
+        </Routes>
+      </div>
+    )
   }
 }
 
-export default AppRoutes;
+export default AppRoutes

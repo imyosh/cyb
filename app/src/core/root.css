@@ -1,12 +1,57 @@
 html {
   height: 100%;
+  overflow: hidden !important;
+
+  box-sizing: border-box !important;
+  font-size: 62.5% !important;
 }
 
 body {
   margin: 0px;
   height: -webkit-fill-available;
+  color: white !important;
+
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+
+  background-image: url("./background.jpg");
 }
 
 #target {
   height: -webkit-fill-available;
+  display: flex;
 }
+
+::-webkit-scrollbar {
+  width: 0.48rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.2);
+
+  scroll-padding-left: 2rem;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+
+  background: #3486ac;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  /* // background: url("../img/menu.png") var(--slider-hover-color); */
+  background-size: 6px 12px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* // ::-webkit-scrollbar-button {
+// height: 50px; //for vertical scrollbar
+// } */
